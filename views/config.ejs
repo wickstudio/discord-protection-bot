@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuration - WICK Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+  <div class="social-media-icons">
+    <a href="https://github.com/wickstudio" target="_blank"><i class="fab fa-github"></i></a>
+    <a href="https://discord.com/invite/wicks" target="_blank"><i class="fab fa-discord"></i></a>
+    <a href="https://www.youtube.com/@wick_studio" target="_blank"><i class="fab fa-youtube"></i></a>
+  </div>
+  <header>
+    <nav>
+      <ul>
+        <a href="/"><li><i class='bx bxs-home'></i>Dashboard</li></a>
+        <a href="/config"><li><i class='bx bxs-cog' ></i>Configuration</li></a>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="config-section">
+      <h1>Bot Configuration</h1>
+      <form id="config-form" action="/config" method="post">
+
+         <!-- General Bot Settings -->
+         <h2>General Bot Settings</h2>
+         <label for="allowedGuildId">Allowed Guild ID:</label>
+         <input type="text" id="allowedGuildId" name="allowedGuildId" value="<%= config.allowedGuildId %>">
+ 
+         <label for="logChannelId">Log Channel ID:</label>
+         <input type="text" id="logChannelId" name="logChannelId" value="<%= config.logChannelId %>">
+ 
+         <label for="whitelistRoles">Whitelist Roles:</label>
+         <div id="whitelistRoles">
+           <% config.whitelistRoles.forEach(function(role, index) { %>
+             <input type="text" name="whitelistRoles[<%= index %>]" value="<%= role %>">
+           <% }) %>
+         </div>
+         <button type="button" onclick="addRoleInput()">Add Role</button>
+
+                                            <!-- antispam -->
+        <h2>Anti-spam Settings</h2>
+        <label for="antispam-active">Active:</label>
+        <input type="checkbox" id="antispam-active" name="antispam.active" <%= config.antispam.active ? 'checked' : '' %>>
+        
+        <label for="antispam-messageCount">Message Count:</label>
+        <input type="number" id="antispam-messageCount" name="antispam.messageCount" value="<%= config.antispam.messageCount %>">
+        
+        <label for="antispam-time">Time (ms):</label>
+        <input type="number" id="antispam-time" name="antispam.time" value="<%= config.antispam.time %>">
+
+                                    <!-- antilinks -->
+                                    <h2>Anti-links Settings</h2>
+
+<label for="antilinks-active">Active:</label>
+<input type="checkbox" id="antilinks-active" name="antilinks.active" <%= config.antilinks.active ? 'checked' : '' %> >
+
+<label for="antilinks-deleteMessages">Delete Messages:</label>
+<input type="checkbox" id="antilinks-deleteMessages" name="antilinks.deleteMessages" <%= config.antilinks.deleteMessages ? 'checked' : '' %> >
+
+<h3>Actions</h3>
+<label for="antilinks-actions-timeout">Timeout:</label>
+<input type="checkbox" id="antilinks-actions-timeout" name="antilinks.actions.timeout" <%= config.antilinks.actions.timeout ? 'checked' : '' %> >
+
+<label for="antilinks-actions-timeoutDuration">Timeout Duration (ms):</label>
+<input type="number" id="antilinks-actions-timeoutDuration" name="antilinks.actions.timeoutDuration" value="<%= config.antilinks.actions.timeoutDuration %>">
+
+<label for="antilinks-actions-kick">Kick:</label>
+<input type="checkbox" id="antilinks-actions-kick" name="antilinks.actions.kick" <%= config.antilinks.actions.kick ? 'checked' : '' %> >
+
+<label for="antilinks-actions-ban">Ban:</label>
+<input type="checkbox" id="antilinks-actions-ban" name="antilinks.actions.ban" <%= config.antilinks.actions.ban ? 'checked' : '' %> >
+        
+                                    <!-- antichannels settings -->
+
+                                    <h2>Channel Monitoring Settings</h2>
+<label for="channelMonitoring-active">Active:</label>
+<input type="checkbox" id="channelMonitoring-active" name="channelMonitoring.active" <%= config.channelMonitoring.active ? 'checked' : '' %> >
+
+<label for="channelMonitoring-maxChannelChanges">Max Channel Changes:</label>
+<input type="number" id="channelMonitoring-maxChannelChanges" name="channelMonitoring.maxChannelChanges" value="<%= config.channelMonitoring.maxChannelChanges %>">
+
+<label for="channelMonitoring-timeFrame">Time Frame (ms):</label>
+<input type="number" id="channelMonitoring-timeFrame" name="channelMonitoring.timeFrame" value="<%= config.channelMonitoring.timeFrame %>">
+
+<label for="channelMonitoring-action">Action:</label>
+<select id="channelMonitoring-action" name="channelMonitoring.action">
+  <option value="timeout" <%= config.channelMonitoring.action === 'timeout' ? 'selected' : '' %>>Timeout</option>
+  <option value="kick" <%= config.channelMonitoring.action === 'kick' ? 'selected' : '' %>>Kick</option>
+  <option value="ban" <%= config.channelMonitoring.action === 'ban' ? 'selected' : '' %>>Ban</option>
+</select>
+
+<label for="channelMonitoring-timeoutDuration">Timeout Duration (ms):</label>
+<input type="number" id="channelMonitoring-timeoutDuration" name="channelMonitoring.timeoutDuration" value="<%= config.channelMonitoring.timeoutDuration %>">
+
+                                    <!-- antiroles settings -->
+
+                                    <h2>Role Monitoring Settings</h2>
+<label for="roleMonitoring-active">Active:</label>
+<input type="checkbox" id="roleMonitoring-active" name="roleMonitoring.active" <%= config.roleMonitoring.active ? 'checked' : '' %> >
+
+<label for="roleMonitoring-maxRoleChanges">Max Role Changes:</label>
+<input type="number" id="roleMonitoring-maxRoleChanges" name="roleMonitoring.maxRoleChanges" value="<%= config.roleMonitoring.maxRoleChanges %>">
+
+<label for="roleMonitoring-timeFrame">Time Frame (ms):</label>
+<input type="number" id="roleMonitoring-timeFrame" name="roleMonitoring.timeFrame" value="<%= config.roleMonitoring.timeFrame %>">
+
+<label for="roleMonitoring-action">Action:</label>
+<select id="roleMonitoring-action" name="roleMonitoring.action">
+  <option value="timeout" <%= config.roleMonitoring.action === 'timeout' ? 'selected' : '' %>>Timeout</option>
+  <option value="kick" <%= config.roleMonitoring.action === 'kick' ? 'selected' : '' %>>Kick</option>
+  <option value="ban" <%= config.roleMonitoring.action === 'ban' ? 'selected' : '' %>>Ban</option>
+</select>
+
+<label for="roleMonitoring-timeoutDuration">Timeout Duration (ms):</label>
+<input type="number" id="roleMonitoring-timeoutDuration" name="roleMonitoring.timeoutDuration" value="<%= config.roleMonitoring.timeoutDuration %>">
+
+                                    <!-- antikick -->
+
+                                    <h2>Kick Monitoring Settings</h2>
+<label for="kickMonitoring-active">Active:</label>
+<input type="checkbox" id="kickMonitoring-active" name="kickMonitoring.active" <%= config.kickMonitoring.active ? 'checked' : '' %> >
+
+<label for="kickMonitoring-maxKicks">Max Kicks:</label>
+<input type="number" id="kickMonitoring-maxKicks" name="kickMonitoring.maxKicks" value="<%= config.kickMonitoring.maxKicks %>">
+
+<label for="kickMonitoring-timeFrame">Time Frame (ms):</label>
+<input type="number" id="kickMonitoring-timeFrame" name="kickMonitoring.timeFrame" value="<%= config.kickMonitoring.timeFrame %>">
+
+<label for="kickMonitoring-action">Action:</label>
+<select id="kickMonitoring-action" name="kickMonitoring.action">
+  <option value="timeout" <%= config.kickMonitoring.action === 'timeout' ? 'selected' : '' %>>Timeout</option>
+  <option value="kick" <%= config.kickMonitoring.action === 'kick' ? 'selected' : '' %>>Kick</option>
+  <option value="ban" <%= config.kickMonitoring.action === 'ban' ? 'selected' : '' %>>Ban</option>
+</select>
+
+<label for="kickMonitoring-timeoutDuration">Timeout Duration (ms):</label>
+<input type="number" id="kickMonitoring-timeoutDuration" name="kickMonitoring.timeoutDuration" value="<%= config.kickMonitoring.timeoutDuration %>">
+
+                                    <!-- antiban -->
+
+                                    <h2>Ban Monitoring Settings</h2>
+<label for="banMonitoring-active">Active:</label>
+<input type="checkbox" id="banMonitoring-active" name="banMonitoring.active" <%= config.banMonitoring.active ? 'checked' : '' %> >
+
+<label for="banMonitoring-maxBans">Max Bans:</label>
+<input type="number" id="banMonitoring-maxBans" name="banMonitoring.maxBans" value="<%= config.banMonitoring.maxBans %>">
+
+<label for="banMonitoring-timeFrame">Time Frame (ms):</label>
+<input type="number" id="banMonitoring-timeFrame" name="banMonitoring.timeFrame" value="<%= config.banMonitoring.timeFrame %>">
+
+<label for="banMonitoring-action">Action:</label>
+<select id="banMonitoring-action" name="banMonitoring.action">
+  <option value="timeout" <%= config.banMonitoring.action === 'timeout' ? 'selected' : '' %>>Timeout</option>
+  <option value="kick" <%= config.banMonitoring.action === 'kick' ? 'selected' : '' %>>Kick</option>
+  <option value="ban" <%= config.banMonitoring.action === 'ban' ? 'selected' : '' %>>Ban</option>
+</select>
+
+<label for="banMonitoring-timeoutDuration">Timeout Duration (ms):</label>
+<input type="number" id="banMonitoring-timeoutDuration" name="banMonitoring.timeoutDuration" value="<%= config.banMonitoring.timeoutDuration %>">
+
+                                    <!-- Bot Monitoring -->
+
+                                    <h2>Bot Monitoring Settings</h2>
+<label for="botMonitoring-active">Active:</label>
+<input type="checkbox" id="botMonitoring-active" name="botMonitoring.active" <%= config.botMonitoring.active ? 'checked' : '' %> >
+
+<label for="botMonitoring-action">Action:</label>
+<select id="botMonitoring-action" name="botMonitoring.action">
+  <option value="timeout" <%= config.botMonitoring.action === 'timeout' ? 'selected' : '' %>>Timeout</option>
+  <option value="kick" <%= config.botMonitoring.action === 'kick' ? 'selected' : '' %>>Kick</option>
+  <option value="ban" <%= config.botMonitoring.action === 'ban' ? 'selected' : '' %>>Ban</option>
+</select>
+
+<label for="botMonitoring-botAction">Bot Action:</label>
+<select id="botMonitoring-botAction" name="botMonitoring.botAction">
+  <option value="kick" <%= config.botMonitoring.botAction === 'kick' ? 'selected' : '' %>>Kick</option>
+  <option value="ban" <%= config.botMonitoring.botAction === 'ban' ? 'selected' : '' %>>Ban</option>
+  <option value="removeRole" <%= config.botMonitoring.botAction === 'removeRole' ? 'selected' : '' %>>Remove Role</option>
+</select>
+
+<label for="botMonitoring-timeoutDuration">Timeout Duration (ms):</label>
+<input type="number" id="botMonitoring-timeoutDuration" name="botMonitoring.timeoutDuration" value="<%= config.botMonitoring.timeoutDuration %>">
+
+                                    <!-- Role Edit -->
+
+                                    <h2>Role Edit Monitoring Settings</h2>
+<label for="roleEditMonitoring-active">Active:</label>
+<input type="checkbox" id="roleEditMonitoring-active" name="roleEditMonitoring.active" <%= config.roleEditMonitoring.active ? 'checked' : '' %> >
+
+<label for="roleEditMonitoring-maxEdits">Max Edits:</label>
+<input type="number" id="roleEditMonitoring-maxEdits" name="roleEditMonitoring.maxEdits" value="<%= config.roleEditMonitoring.maxEdits %>">
+
+<label for="roleEditMonitoring-timeFrame">Time Frame (ms):</label>
+<input type="number" id="roleEditMonitoring-timeFrame" name="roleEditMonitoring.timeFrame" value="<%= config.roleEditMonitoring.timeFrame %>">
+
+<label for="roleEditMonitoring-action">Action:</label>
+<select id="roleEditMonitoring-action" name="roleEditMonitoring.action">
+  <option value="timeout" <%= config.roleEditMonitoring.action === 'timeout' ? 'selected' : '' %>>Timeout</option>
+  <option value="kick" <%= config.roleEditMonitoring.action === 'kick' ? 'selected' : '' %>>Kick</option>
+  <option value="ban" <%= config.roleEditMonitoring.action === 'ban' ? 'selected' : '' %>>Ban</option>
+</select>
+
+<label for="roleEditMonitoring-timeoutDuration">Timeout Duration (ms):</label>
+<input type="number" id="roleEditMonitoring-timeoutDuration" name="roleEditMonitoring.timeoutDuration" value="<%= config.roleEditMonitoring.timeoutDuration %>">
+
+                                    <!-- Server Edit -->
+
+                                    <h2>Server Edit Monitoring Settings</h2>
+<label for="serverEditMonitoring-active">Active:</label>
+<input type="checkbox" id="serverEditMonitoring-active" name="serverEditMonitoring.active" <%= config.serverEditMonitoring.active ? 'checked' : '' %> >
+
+<label for="serverEditMonitoring-maxEdits">Max Edits:</label>
+<input type="number" id="serverEditMonitoring-maxEdits" name="serverEditMonitoring.maxEdits" value="<%= config.serverEditMonitoring.maxEdits %>">
+
+<label for="serverEditMonitoring-timeFrame">Time Frame (ms):</label>
+<input type="number" id="serverEditMonitoring-timeFrame" name="serverEditMonitoring.timeFrame" value="<%= config.serverEditMonitoring.timeFrame %>">
+
+<label for="serverEditMonitoring-action">Action:</label>
+<select id="serverEditMonitoring-action" name="serverEditMonitoring.action">
+  <option value="timeout" <%= config.serverEditMonitoring.action === 'timeout' ? 'selected' : '' %>>Timeout</option>
+  <option value="kick" <%= config.serverEditMonitoring.action === 'kick' ? 'selected' : '' %>>Kick</option>
+  <option value="ban" <%= config.serverEditMonitoring.action === 'ban' ? 'selected' : '' %>>Ban</option>
+</select>
+
+<label for="serverEditMonitoring-timeoutDuration">Timeout Duration (ms):</label>
+<input type="number" id="serverEditMonitoring-timeoutDuration" name="serverEditMonitoring.timeoutDuration" value="<%= config.serverEditMonitoring.timeoutDuration %>">
+        
+        
+        <button type="submit">Update Settings</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>WICK - Protection Bot Dashboard &copy; 2024</p>
+  </footer>
+
+  <script>
+    function addRoleInput() {
+      const container = document.getElementById('whitelistRoles');
+      const index = container.getElementsByTagName('input').length;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.name = `whitelistRoles[${index}]`;
+      container.appendChild(input);
+    }
+  </script>
+
+  <script src="/public/config.js"></script>
+</body>
+</html>
